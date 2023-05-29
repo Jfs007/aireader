@@ -20,7 +20,7 @@ async function main() {
 
 
 
-    const TOKEN = 'MTEwNjA5NzM1OTI0MDMxODk3Nw.Gzy9Ia.a4RpzDeZwIjhfvnEPo8LnFUEVyZE_pDyz24jrQ'
+    const TOKEN = 'MTEwNjA5NzM1OTI0MDMxODk3Nw.GQqYCf.1mj2SAC2mNvK6rU4u2ji2H1FAM4tGNrgJn58n0'
     const CHANNEL_ID = options.CHANNEL_ID
 
     const client = new Client({
