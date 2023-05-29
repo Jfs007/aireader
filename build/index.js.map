@@ -1,0 +1,1 @@
+{"version":3,"sources":["../src/index.ts"],"sourcesContent":["function main() {\n    console.log('hello word11')\n}\nmain()"],"mappings":";AAAA,SAAS,OAAO;AACZ,UAAQ,IAAI,cAAc;AAC9B;AACA,KAAK;","names":[]}

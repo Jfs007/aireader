@@ -1,0 +1,41 @@
+{
+  "name": "aireader",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "engines": {
+    "node": "^16 || ^18 || ^19"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "esno ./src/index.ts",
+    "tsinit": "tsc --init",
+    "gb": "tsc ./src/example/talk/client.ts"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^20.1.4",
+    "esno": "^0.16.3",
+    "tsup": "^6.7.0",
+    "tsx": "^3.12.7",
+    "typescript": "^5.0.4"
+  },
+  "dependencies": {
+    "@discordjs/proxy": "^1.4.1",
+    "axios": "^1.3.5",
+    "chalk": "^5.2.0",
+    "discord.js": "^14.11.0",
+    "eventsource-parser": "^1.0.0",
+    "express": "^4.18.2",
+    "fluent-ffmpeg": "^2.1.2",
+    "form-data": "^4.0.0",
+    "https-proxy-agent": "^6.1.0",
+    "keyv": "^4.5.2",
+    "node-fetch": "^3.3.1",
+    "p-timeout": "^6.1.1",
+    "undici": "^5.22.1",
+    "uuid": "^9.0.0",
+    "vuerouter-build-vite-plugin": "^1.1.5"
+  }
+}
