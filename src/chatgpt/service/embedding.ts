@@ -6,7 +6,7 @@ class Embedding extends OpenAiApi {
         super(configuration);
     }
     async create(options: Openai.Embedding.createApi) {
-        options.model = this.model || options.model;
+        options.model = options.model || this.model;
         try {
             let response = await this.fetch(`${this.api}embeddings`, {
                 method: 'post',

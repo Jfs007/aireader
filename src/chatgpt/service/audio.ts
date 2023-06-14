@@ -13,7 +13,7 @@ class Audio extends OpenAiApi {
         }
     }
     async transcriptions(options: Openai.Audio.transcriptions) {
-        options.model = this.model || options.model;
+        options.model = options.model || this.model;
         const formData = new FormData()
         Object.keys(options).map(key => {
             let value = options[key];

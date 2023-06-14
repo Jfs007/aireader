@@ -10,7 +10,7 @@ class ChatCompletions extends OpenAiApi {
         super(configuration);
     }
     talk(options: Openai.ChatCompletions.talk, fetchOptions: any = {}) {
-        options.model = this.model || options.model;
+        options.model = options.model || this.model;
         let HttpController = options.stream ? OpenaiHttpEventSource : Http;
         let sse = new HttpController(`${this.api}chat/completions`);
         sse.setHeaders(this.headers);

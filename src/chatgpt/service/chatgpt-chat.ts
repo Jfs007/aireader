@@ -45,7 +45,7 @@ class ChatgptChat extends OpenAiApi {
             "model": this.model,
             "parent_message_id": options.parent_message_id || uuidv4()
         }
-        options.model = this.model || options.model;
+        options.model = options.model || this.model;
         let HttpController = options.stream ? ChatgptHttpEventSource : Http;
         let sse = new HttpController(`${this.api}api/conversation`);
         if(!options.stream) {

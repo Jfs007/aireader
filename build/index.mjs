@@ -922,6 +922,7 @@ var midjourney_api_default = MidjourneyApi;
 // src/midjourney/service/channels.ts
 import fs2 from "fs";
 import path2 from "path";
+import mime from "mime";
 var Channels = class extends midjourney_api_default {
   constructor(configuration) {
     super(configuration);
@@ -931,9 +932,10 @@ var Channels = class extends midjourney_api_default {
     let file = fs2.readFileSync(filePath);
     let file_size = file.length;
     let filename = path2.basename(filePath);
+    let mimeType = mime.getType(filePath);
     filename = `${options.id || this.generateNumericNonce()}_${filename}`;
+    console.log();
     try {
-      console.log(options, "options");
       let AttachmentResponse = await this.fetch(`${this.api}/channels/${this.configuration.CHANNEL_ID}/attachments`, {
         method: "post",
         headers: this.headers,
@@ -947,7 +949,7 @@ var Channels = class extends midjourney_api_default {
         method: "put",
         body: file,
         headers: {
-          "content-type": "image/png"
+          "content-type": mimeType
         }
       });
       return {

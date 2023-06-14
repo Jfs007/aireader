@@ -20,8 +20,6 @@ class Channels extends MidjourneyApi {
         let filename = path.basename(filePath)
         let mimeType = mime.getType(filePath)
         filename = `${options.id || this.generateNumericNonce()}_${filename}`
-        console.log()
-        
         try {
             let AttachmentResponse = await this.fetch(`${this.api}/channels/${this.configuration.CHANNEL_ID}/attachments`, {
                 method: 'post',

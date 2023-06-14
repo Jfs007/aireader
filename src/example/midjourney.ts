@@ -52,7 +52,7 @@ async function main() {
         filePath: __dirname + '/WechatIMG678.png',
         // file: fs.createReadStream('./WechatIMG678.png')
     })
-    // console.log(res, 'res');
+    console.log(res, 'res');
 
     // let v = await midjourney.Channels.sendMessage({
     //     content: '下午好你好啊',
