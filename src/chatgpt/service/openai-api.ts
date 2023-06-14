@@ -1,6 +1,6 @@
 
 import Base from "src/utils/base"
-import fetch from "node-fetch"
+import fetch from "src/utils/http/fetch"
 import Configuration from "../configuration"
 class OpenaiApi extends Base {
     public api: string = 'https://api.openai.com/v1/'

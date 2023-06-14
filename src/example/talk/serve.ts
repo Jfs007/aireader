@@ -19,9 +19,9 @@ let options: Openai.Configuration = {
 }
 
 
-import { Center, Counter, Man } from 'src/queue'
+import Queue from 'src/queue'
 
-
+const { Center, Counter, Man } = Queue
 
 const openai = new Openai(options)
 

@@ -1,5 +1,5 @@
 
-import fetch from 'node-fetch'
+import fetch from './fetch'
 import { createParser } from 'eventsource-parser'
 import Http from './http';
 import pTimeout from 'p-timeout'
@@ -32,10 +32,8 @@ class HttpEventSource extends Http {
 				headers: this.headers,
 				...this.options,
 				body: this.options.body || this.body,
-			}), {
-				milliseconds: this.timeoutMs,
-				signal: this.signal,
-				fallback: () => {
+			}), this.timeoutMs,
+				() => {
 					this.response.status = 503
 					this.response.code = 503
 					this.response.message = 'TIMEOUT'
@@ -47,7 +45,7 @@ class HttpEventSource extends Http {
 					}
 					throw this.response
 				}
-			});
+			);
 			const res = await decorateFetch
 			const parser = createParser((event) => {
 				if (event.type == 'event') {
@@ -83,7 +81,7 @@ class HttpEventSource extends Http {
 				status: res.status,
 			}
 			this.__responseResolve && this.__responseResolve(res);
-
+			
 			if (res.status == 200) {
 				let body = res.body;
 				body.on('readable', () => {

@@ -25,7 +25,11 @@ class Counter extends Base {
     sub(man: Man) {
         man.__counter = this
         this.mans.push(man)
-        if (this.runMan && this.runMan.receptioning) return;
+        if (this.runMan && this.runMan.receptioning) {
+            // 推送一下
+            this.notice();
+            return;
+        };
         this.next();
     }
     unsub(man: Man) {

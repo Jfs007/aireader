@@ -15,12 +15,11 @@ class Interactions extends MidjourneyApi {
             //     attachments: [response.body]
             // })
 
-
+            
             // https://discord.com/api/webhooks/1112305836333735978/ckXJvKYqNlKNqwe0Rr-rz63Ny32205y2e-UCNU7zqmBgjbNqbAU_o_DLrBJkBBhmkRSm
-            response.body.id = "0"
+            response.body.id = options.id
             let c_id = "1092492867185950852"
             let reqid = this.generateNumericNonce()
-            console.log(reqid);
             let payload_json = {
                 id: reqid,
                 "type": 2,

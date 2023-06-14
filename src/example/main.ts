@@ -1,10 +1,8 @@
 
 
-import Openai from "src/chatgpt";
-import Configuration from 'src/chatgpt/configuration';
 import { HttpsProxyAgent } from "https-proxy-agent";
 
-import Seed from "src";
+import Seed from "src/reader";
 
 
 import fs from 'fs';

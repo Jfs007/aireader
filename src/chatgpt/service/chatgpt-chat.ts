@@ -18,7 +18,12 @@ class ChatgptChat extends OpenAiApi {
         super(configuration);
     }
     talk(options: Openai.ChatgptChat.talk, fetchOptions: any = {}) {
+        let stream:any = options.stream
+        if(stream === false) {
+            stream = false
+        }
         let body = {
+            "stream": stream || false,
             "action": "next",
             "conversation_id": options.conversation_id || undefined,
             "messages": options.messages.map(message => {
@@ -43,6 +48,16 @@ class ChatgptChat extends OpenAiApi {
         options.model = this.model || options.model;
         let HttpController = options.stream ? ChatgptHttpEventSource : Http;
         let sse = new HttpController(`${this.api}api/conversation`);
+        if(!options.stream) {
+            sse.setResponse(async res => {
+                let text = await res.text();
+                let answer = text.replace(/data\: \[DONE\]/g, ' ').split('data: ').slice(-1)[0]
+                let r = JSON.parse(answer);
+                r.choices = [{ delta: { content: r.message?.content?.parts[0] } }]
+                return r;
+            })
+            sse.setTimeoutMs(200 * 1000)
+        }
         sse.setHeaders(this.headers);
         sse.setProxy(this.configuration.agent);
         sse.setSignal(fetchOptions?.signal);

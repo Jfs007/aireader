@@ -3,4 +3,4 @@ import Counter from "./counter";
 import Man from "./man";
 
 
-export { Counter, Center, Man } 
+export default { Counter, Center, Man } 

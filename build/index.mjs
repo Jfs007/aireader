@@ -1,48 +1,17 @@
-var __create = Object.create;
-var __defProp = Object.defineProperty;
-var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
-var __getOwnPropNames = Object.getOwnPropertyNames;
-var __getProtoOf = Object.getPrototypeOf;
-var __hasOwnProp = Object.prototype.hasOwnProperty;
-var __export = (target, all) => {
-  for (var name in all)
-    __defProp(target, name, { get: all[name], enumerable: true });
-};
-var __copyProps = (to, from, except, desc) => {
-  if (from && typeof from === "object" || typeof from === "function") {
-    for (let key of __getOwnPropNames(from))
-      if (!__hasOwnProp.call(to, key) && key !== except)
-        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
-  }
-  return to;
-};
-var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
-  // If the importer is in node compatibility mode or this is not an ESM
-  // file that has been converted to a CommonJS file using a Babel-
-  // compatible transform (i.e. "__esModule" has not been set), then set
-  // "default" to the CommonJS "module.exports" for node compatibility.
-  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
-  mod
-));
-var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
-
-// src/index.ts
-var src_exports = {};
-__export(src_exports, {
-  Midjourney: () => midjourney_default,
-  OpenAi: () => chatgpt_default,
-  Queue: () => queue_default,
-  Reader: () => reader_default2
-});
-module.exports = __toCommonJS(src_exports);
+// node_modules/.pnpm/tsup@6.7.0_typescript@5.1.3/node_modules/tsup/assets/esm_shims.js
+import { fileURLToPath } from "url";
+import path from "path";
+var getFilename = () => fileURLToPath(import.meta.url);
+var getDirname = () => path.dirname(getFilename());
+var __dirname = /* @__PURE__ */ getDirname();
 
 // src/utils/base.ts
-var import_events = __toESM(require("events"));
-var import_uuid = require("uuid");
+import EventEmitter from "events";
+import { v4 } from "uuid";
 var Base = class {
   constructor(options = {}) {
-    this.uuid = (0, import_uuid.v4)();
-    this.E = new import_events.default();
+    this.uuid = v4();
+    this.E = new EventEmitter();
   }
   init(options = {}) {
     for (let key in options) {
@@ -90,9 +59,9 @@ var Text = class extends reader_default {
 var text_default = Text;
 
 // src/reader/video.ts
-var import_fluent_ffmpeg = __toESM(require("fluent-ffmpeg"));
-var import_uuid3 = require("uuid");
-var import_fs = __toESM(require("fs"));
+import ffmpeg from "fluent-ffmpeg";
+import { v4 as uuidv42 } from "uuid";
+import fs from "fs";
 
 // src/chatgpt/configuration.ts
 var Configuration = class extends Base {
@@ -108,9 +77,9 @@ var Configuration = class extends Base {
 var configuration_default = Configuration;
 
 // src/utils/http/fetch.ts
-var import_node_fetch = __toESM(require("node-fetch"));
+import fetch from "node-fetch";
 function Fetch(url, init) {
-  return (0, import_node_fetch.default)(url, init);
+  return fetch(url, init);
 }
 
 // src/chatgpt/service/openai-api.ts
@@ -159,7 +128,7 @@ var OpenaiApi = class extends Base {
 var openai_api_default = OpenaiApi;
 
 // src/chatgpt/service/audio.ts
-var import_form_data = __toESM(require("form-data"));
+import FormData from "form-data";
 var Audio = class extends openai_api_default {
   constructor(configuration) {
     super(configuration);
@@ -173,7 +142,7 @@ var Audio = class extends openai_api_default {
   }
   async transcriptions(options) {
     options.model = this.model || options.model;
-    const formData = new import_form_data.default();
+    const formData = new FormData();
     Object.keys(options).map((key) => {
       let value = options[key];
       formData.append(key, value);
@@ -200,10 +169,10 @@ var Audio = class extends openai_api_default {
 var audio_default = Audio;
 
 // src/utils/http/sse.ts
-var import_eventsource_parser = require("eventsource-parser");
+import { createParser } from "eventsource-parser";
 
 // src/utils/http/http.ts
-var import_p_timeout = __toESM(require("p-timeout"));
+import pTimeout from "p-timeout";
 var Http = class extends Base {
   constructor(url) {
     super();
@@ -265,7 +234,7 @@ var Http = class extends Base {
   async run() {
     try {
       this.setup();
-      let decorateFetch = (0, import_p_timeout.default)(
+      let decorateFetch = pTimeout(
         Fetch(this.url, {
           method: "post",
           agent: this.proxy,
@@ -354,7 +323,7 @@ var Http = class extends Base {
 var http_default = Http;
 
 // src/utils/http/sse.ts
-var import_p_timeout2 = __toESM(require("p-timeout"));
+import pTimeout2 from "p-timeout";
 var HttpEventSource = class extends http_default {
   constructor(url) {
     super(url);
@@ -366,7 +335,7 @@ var HttpEventSource = class extends http_default {
     this.streamTimer = null;
     super.setup();
     try {
-      let decorateFetch = (0, import_p_timeout2.default)(
+      let decorateFetch = pTimeout2(
         Fetch(this.url, {
           method: "post",
           agent: this.proxy,
@@ -387,7 +356,7 @@ var HttpEventSource = class extends http_default {
         }
       );
       const res = await decorateFetch;
-      const parser = (0, import_eventsource_parser.createParser)((event) => {
+      const parser = createParser((event) => {
         if (event.type == "event") {
           try {
             this.onPush(event.data);
@@ -562,7 +531,7 @@ var Embedding = class extends openai_api_default {
 var embedding_default = Embedding;
 
 // src/chatgpt/service/chatgpt-chat.ts
-var import_uuid2 = require("uuid");
+import { v4 as uuidv4 } from "uuid";
 var ChatgptChat = class extends openai_api_default {
   constructor(configuration) {
     super(configuration);
@@ -586,7 +555,7 @@ var ChatgptChat = class extends openai_api_default {
       "conversation_id": options.conversation_id || void 0,
       "messages": options.messages.map((message) => {
         return {
-          "id": message.message_id || (0, import_uuid2.v4)(),
+          "id": message.message_id || uuidv4(),
           "role": message.role,
           "author": {
             "role": message.role
@@ -600,7 +569,7 @@ var ChatgptChat = class extends openai_api_default {
         };
       }),
       "model": this.model,
-      "parent_message_id": options.parent_message_id || (0, import_uuid2.v4)()
+      "parent_message_id": options.parent_message_id || uuidv4()
     };
     options.model = this.model || options.model;
     let HttpController = options.stream ? chatgpt_sse_default : http_default;
@@ -632,8 +601,8 @@ var Openai = class extends Base {
   constructor(configuration) {
     let _config = new configuration_default(configuration);
     super(_config);
-    modules.map((module2) => {
-      this[module2.name] = new module2(_config);
+    modules.map((module) => {
+      this[module.name] = new module(_config);
     });
   }
 };
@@ -656,11 +625,11 @@ var Video = class extends reader_default {
   }
   async toString() {
     return new Promise((resolve, reject) => {
-      let tmpFile = `${__dirname}/.tmp/${(0, import_uuid3.v4)()}.mp3`;
-      (0, import_fluent_ffmpeg.default)(this.file).noVideo().on("end", async () => {
+      let tmpFile = `${__dirname}/.tmp/${uuidv42()}.mp3`;
+      ffmpeg(this.file).noVideo().on("end", async () => {
         try {
           let response = await this.openai.Audio.transcriptions({
-            file: import_fs.default.createReadStream(tmpFile)
+            file: fs.createReadStream(tmpFile)
           });
           this.text = response.data.text;
           console.log(this.text);
@@ -668,7 +637,7 @@ var Video = class extends reader_default {
         } catch (error) {
           reject("");
         } finally {
-          import_fs.default.unlinkSync(tmpFile);
+          fs.unlinkSync(tmpFile);
         }
       }).output(tmpFile).run();
     });
@@ -677,8 +646,8 @@ var Video = class extends reader_default {
 var video_default = Video;
 
 // src/reader/index.ts
-var import_keyv = __toESM(require("keyv"));
-var import_uuid4 = require("uuid");
+import Keyv from "keyv";
+import { v4 as v42 } from "uuid";
 var Seed = class extends Base {
   constructor(options) {
     super(options);
@@ -691,7 +660,7 @@ var Seed = class extends Base {
     this.contextPoint = 200;
     this.packs = [];
     this.chunks = [];
-    this.store = new import_keyv.default({ store: /* @__PURE__ */ new Map() });
+    this.store = new Keyv({ store: /* @__PURE__ */ new Map() });
     this.Openai = null;
     this.readend = false;
     let min = Math.min(this.maxLimited, options.limited || this.limited);
@@ -737,7 +706,7 @@ var Seed = class extends Base {
     let openai = this.Openai;
     let l = this.chunks.length;
     if (l <= 1) {
-      let uuid = (0, import_uuid4.v4)();
+      let uuid = v42();
       this.store.set(uuid, {
         question: "",
         answer: this.chunks[0],
@@ -773,7 +742,7 @@ var Seed = class extends Base {
           embed,
           question: content,
           answer: text,
-          uuid: (0, import_uuid4.v4)()
+          uuid: v42()
         });
       });
     }));
@@ -894,7 +863,7 @@ var Configuration2 = class extends Base {
 var configuration_default2 = Configuration2;
 
 // src/midjourney/service/midjourney-api.ts
-var import_node_fetch2 = __toESM(require("node-fetch"));
+import fetch2 from "node-fetch";
 var MidjourneyApi = class extends Base {
   constructor(options) {
     super(options);
@@ -916,7 +885,7 @@ var MidjourneyApi = class extends Base {
   fetch(url, options) {
     options.agent = options.agent || this.configuration.agent;
     options.signal = options.signal;
-    return (0, import_node_fetch2.default)(url, options);
+    return fetch2(url, options);
   }
   generateNumericNonce(length = 19) {
     const characters = "0123456789";
@@ -951,17 +920,17 @@ var MidjourneyApi = class extends Base {
 var midjourney_api_default = MidjourneyApi;
 
 // src/midjourney/service/channels.ts
-var import_fs2 = __toESM(require("fs"));
-var import_path = __toESM(require("path"));
+import fs2 from "fs";
+import path2 from "path";
 var Channels = class extends midjourney_api_default {
   constructor(configuration) {
     super(configuration);
   }
   async attachments(options) {
     let filePath = options.filePath;
-    let file = import_fs2.default.readFileSync(filePath);
+    let file = fs2.readFileSync(filePath);
     let file_size = file.length;
-    let filename = import_path.default.basename(filePath);
+    let filename = path2.basename(filePath);
     filename = `${options.id || this.generateNumericNonce()}_${filename}`;
     try {
       console.log(options, "options");
@@ -1101,8 +1070,8 @@ var Midjourney = class extends Base {
   constructor(configuration) {
     let _config = new configuration_default2(configuration);
     super(_config);
-    modules2.map((module2) => {
-      this[module2.name] = new module2(_config);
+    modules2.map((module) => {
+      this[module.name] = new module(_config);
     });
   }
 };
@@ -1234,11 +1203,10 @@ var man_default = Man;
 
 // src/queue/index.ts
 var queue_default = { Counter: counter_default, Center: center_default, Man: man_default };
-// Annotate the CommonJS export names for ESM import in node:
-0 && (module.exports = {
-  Midjourney,
-  OpenAi,
-  Queue,
-  Reader
-});
-//# sourceMappingURL=index.js.map
+export {
+  midjourney_default as Midjourney,
+  chatgpt_default as OpenAi,
+  queue_default as Queue,
+  reader_default2 as Reader
+};
+//# sourceMappingURL=index.mjs.map

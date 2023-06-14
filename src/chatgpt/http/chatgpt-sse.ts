@@ -19,8 +19,6 @@ class ChatgptHttpEventSource extends HttpEventSource {
             response.choices = [{ delta: { content: response.message?.content?.parts[0] } }]
             super.onPush(response);
         } catch (error) {
-
-            // super.onPush({}); 
         } finally {
             return this;
         }

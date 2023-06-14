@@ -1,8 +1,9 @@
 
 import MidjourneyApi from "./midjourney-api"
 import FormData from 'form-data'
-import fs, { ReadStream } from 'fs'
+import fs from 'fs'
 import path from 'path';
+import mime from 'mime';
 
 
 
@@ -17,11 +18,15 @@ class Channels extends MidjourneyApi {
         let file = fs.readFileSync(filePath);
         let file_size = file.length
         let filename = path.basename(filePath)
+        let mimeType = mime.getType(filePath)
+        filename = `${options.id || this.generateNumericNonce()}_${filename}`
+        console.log()
+        
         try {
             let AttachmentResponse = await this.fetch(`${this.api}/channels/${this.configuration.CHANNEL_ID}/attachments`, {
                 method: 'post',
                 headers: this.headers,
-                body: JSON.stringify({ "files": [{ "filename": filename, "file_size": file_size, "id": "17" }] })
+                body: JSON.stringify({ "files": [{ "filename": filename, "file_size": file_size, "id": options.attachments_id || "0" }] })
             })
             if (AttachmentResponse.status != 200) throw AttachmentResponse
             let AttachmentResponseJson: any = await AttachmentResponse.json()
@@ -31,7 +36,7 @@ class Channels extends MidjourneyApi {
                 method: 'put',
                 body: file,
                 headers: {
-                    'content-type': 'image/png'
+                    'content-type': mimeType
                 }
             })
             return {
@@ -49,10 +54,6 @@ class Channels extends MidjourneyApi {
 
     }
 
-    
-
-
-
 
 
     async sendMessage(options: Midjourney.Channels.sendMessage) {
@@ -65,7 +66,7 @@ class Channels extends MidjourneyApi {
                 "sticker_ids": [],
                 "attachments": []
             }, options)
-
+            // console.log(bodyOptions, 'bodyOptions')
             let response = await this.fetch(`${this.api}/channels/${this.configuration.CHANNEL_ID}/messages`, {
                 method: 'post',
                 headers: this.headers,

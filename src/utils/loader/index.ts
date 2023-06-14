@@ -1,5 +1,4 @@
 import Base from "../base";
-import { readdir, stat as FileStat } from '../file';
 import fs from 'fs';
 
 interface Options {

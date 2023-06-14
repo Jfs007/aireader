@@ -18,6 +18,7 @@ class ChatCompletions extends OpenAiApi {
         sse.setSignal(fetchOptions?.signal);
         sse.setBody(JSON.stringify(options));
         sse.setOptions(fetchOptions);
+        sse.setTimeoutMs(200 * 1000)
         return sse;
     }
 

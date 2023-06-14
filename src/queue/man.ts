@@ -9,6 +9,7 @@ class Man extends Base {
     name: string
     __serve: Function
     __counter: Counter
+    __next: Function
     receptioning: boolean = false
     constructor(options: any = {}) {
         super()
@@ -19,7 +20,7 @@ class Man extends Base {
     }
 
     serve(next): void {
-        this.__serve(next)
+        this.__serve && this.__serve(next)
     }
 
     // 执行任务
@@ -27,13 +28,21 @@ class Man extends Base {
         counter = this.__counter || counter
         this.receptioning = true;
         // next函数只允许执行一次
+        // 防止 开发者多次 next
         let next: any = () => {
             if (next.void) return;
-            counter.next.bind(counter)
+            counter.next.call(counter)
             next.void = true;
+            // this.__next = null;
         }
         next.void = false;
+        this.__next = next;
         this.serve(next)
+    }
+
+
+    next() {
+        this.__next && this.__next()
     }
 
     doEnd() {
@@ -45,7 +54,7 @@ class Man extends Base {
     onMessage(counter: Counter, info: any) {
         // custom
     }
-
+    // 离开当前队列或者结束当前服务
     leave(counter?: Counter) {
         this.receptioning = false;
         (this.__counter || counter).unsub(this);

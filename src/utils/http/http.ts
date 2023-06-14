@@ -1,5 +1,5 @@
 
-import fetch from 'node-fetch'
+import fetch from './fetch'
 import EventEmitter from "events"
 import Base from '../base'
 import { HttpsProxyAgent } from "https-proxy-agent"
@@ -14,6 +14,7 @@ class Http extends Base {
     url: string = ''
     uid: string = ''
     __inEnd = false
+    __stage = ''
     proxy: HttpsProxyAgent<any> = null;
     headers: any = {
         'Content-Type': 'application/json'
@@ -27,9 +28,8 @@ class Http extends Base {
 
     options: Parameters<typeof fetch>[1] = {}
 
-    E: EventEmitter = new EventEmitter()
-
     __responseResolve: Function = null;
+    __responseHandle: Function = async (res) => res.json();
     response: any = {
 
     };
@@ -81,6 +81,12 @@ class Http extends Base {
         return this
     }
 
+
+    setResponse(handle: Function) {
+        this.__responseHandle = handle
+    }
+
+
     setup() {
         this.__inEnd = false;
 
@@ -96,10 +102,9 @@ class Http extends Base {
                 headers: this.headers,
                 ...this.options,
                 body: this.options.body || this.body,
-            }), {
-                milliseconds: this.timeoutMs,
-                signal: this.signal,
-                fallback: () => {
+            }),
+                this.timeoutMs,
+                () => {
                     this.response.status = 503
                     this.response.code = 503
                     this.response.message = 'TIMEOUT'
@@ -113,7 +118,8 @@ class Http extends Base {
                     }
                     throw this.response
                 }
-            })
+
+            )
 
             const res = await decorateFetch;
 
@@ -123,13 +129,22 @@ class Http extends Base {
 
             }
 
-
             this.__responseResolve && this.__responseResolve(res);
+            
             if (res.status == 200) {
+                let body = null;
+                try {
+                    body = await this.__responseHandle(res)
+                } catch (error) {
+                    // console.log(error, 'body')
+                } finally {
+                    this.onClose(body);
+                }
 
-                let body = await res.json()
-                this.onClose(body);
+
+
             } else {
+
                 this.response.type = 'ERROR'
                 this.onError(this.response);
             }
@@ -147,47 +162,46 @@ class Http extends Base {
         }
 
     }
+
+
+
     responseBody() {
         return new Promise((resolve) => {
             this.__responseResolve = resolve;
         })
     }
 
-    on(name: string, listener: (...args: any[]) => any) {
-        this.E.on(name, listener)
-        return this;
-    }
 
     onPush(payload, type?: string) {
         if (this.__inEnd) return this
-        this.E.emit('push', payload, type)
+        this.emit('push', payload, type)
         return this
     }
 
     onError(payload, type?: string) {
         if (this.__inEnd) return this;
         this.__inEnd = true;
-        this.E.emit('error', payload, type)
+        this.emit('error', payload, type)
         return this
     }
 
 
     onConnect(payload, type?: string) {
-        this.E.emit('connect', payload, type)
+        this.emit('connect', payload, type)
         return this
     }
 
     onClose(payload, type?: string) {
         if (this.__inEnd) return this;
         this.__inEnd = true;
-        this.E.emit('close', payload, type)
+        this.emit('close', payload, type)
         return this
     }
 
     onTimeout(payload?: string, type: string = 'TIMEOUT') {
         if (this.__inEnd) return this;
         this.__inEnd = true;
-        this.E.emit('timeout', payload, type)
+        this.emit('timeout', payload, type)
         return this
     }
 

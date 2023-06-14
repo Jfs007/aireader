@@ -1,16 +1,26 @@
 {
-  "name": "aireader",
-  "version": "1.0.0",
+  "name": "aimix",
+  "version": "1.2.9",
   "description": "",
-  "main": "index.js",
   "engines": {
     "node": "^16 || ^18 || ^19"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "esno ./src/index.ts",
-    "tsinit": "tsc --init",
-    "gb": "tsc ./src/example/talk/client.ts"
+    "build": "tsup",
+    "tsinit": "tsc --init"
+  },
+  "main": "./build/index.js",
+  "source": "./src/index.ts",
+  "module": ".build/index.js",
+  "types": "./build/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./build/index.js",
+      "types": "./build/index.d.ts",
+      "default": "./build/index.js"
+    }
   },
   "author": "",
   "license": "ISC",
@@ -33,8 +43,9 @@
     "form-data": "^4.0.0",
     "https-proxy-agent": "^6.1.0",
     "keyv": "^4.5.2",
-    "node-fetch": "^3.3.1",
-    "p-timeout": "^6.1.1",
+    "mime": "^3.0.0",
+    "node-fetch": "^2.6.1",
+    "p-timeout": "^4.1.0",
     "undici": "^5.22.1",
     "uuid": "^9.0.0",
     "vuerouter-build-vite-plugin": "^1.1.5"
